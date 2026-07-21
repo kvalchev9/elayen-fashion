@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 
@@ -18,7 +19,7 @@ export default function CartPage() {
   );
 
   return (
-    <main className="mx-auto max-w-5xl px-8 py-16">
+    <main className="mx-auto max-w-6xl px-8 py-16">
       <h1 className="mb-10 text-4xl font-bold">
         Количка
       </h1>
@@ -42,24 +43,37 @@ export default function CartPage() {
             {cart.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between rounded-lg border p-6"
+                className="flex items-center gap-6 rounded-xl border p-6"
               >
-                <div>
+                <div className="relative h-32 w-24 overflow-hidden rounded-lg bg-gray-100">
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+
+                <div className="flex-1">
                   <h2 className="text-xl font-semibold">
                     {item.name}
                   </h2>
 
-                  <div className="mt-3 flex items-center gap-3">
+                  <p className="mt-2">
+                    {item.price.toFixed(2)} лв.
+                  </p>
+
+                  <div className="mt-4 flex items-center gap-3">
                     <button
                       onClick={() =>
                         decreaseQuantity(item.id)
                       }
-                      className="h-9 w-9 rounded bg-gray-700 text-lg"
+                      className="h-9 w-9 rounded bg-gray-700 text-white"
                     >
-                      −
+                      -
                     </button>
 
-                    <span className="text-lg font-bold">
+                    <span className="font-bold">
                       {item.quantity}
                     </span>
 
@@ -67,23 +81,27 @@ export default function CartPage() {
                       onClick={() =>
                         increaseQuantity(item.id)
                       }
-                      className="h-9 w-9 rounded bg-gray-700 text-lg"
+                      className="h-9 w-9 rounded bg-gray-700 text-white"
                     >
                       +
                     </button>
                   </div>
-
-                  <p className="mt-3">
-                    {(item.price * item.quantity).toFixed(2)} лв.
-                  </p>
                 </div>
 
-                <button
-                  onClick={() => removeFromCart(item.id)}
-                  className="rounded bg-red-600 px-4 py-2 text-white"
-                >
-                  Премахни
-                </button>
+                <div className="text-right">
+                  <p className="mb-4 text-xl font-bold">
+                    {(item.price * item.quantity).toFixed(2)} лв.
+                  </p>
+
+                  <button
+                    onClick={() =>
+                      removeFromCart(item.id)
+                    }
+                    className="rounded bg-red-600 px-4 py-2 text-white"
+                  >
+                    Премахни
+                  </button>
+                </div>
               </div>
             ))}
           </div>

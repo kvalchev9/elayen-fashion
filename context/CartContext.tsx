@@ -12,6 +12,7 @@ type CartItem = {
   id: number;
   name: string;
   price: number;
+  image: string;
   quantity: number;
 };
 
@@ -42,12 +43,19 @@ export function CartProvider({
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem(
+      "cart",
+      JSON.stringify(cart)
+    );
   }, [cart]);
 
-  const addToCart = (item: Omit<CartItem, "quantity">) => {
+  const addToCart = (
+    item: Omit<CartItem, "quantity">
+  ) => {
     setCart((prev) => {
-      const existing = prev.find((p) => p.id === item.id);
+      const existing = prev.find(
+        (p) => p.id === item.id
+      );
 
       if (existing) {
         return prev.map((p) =>
@@ -60,7 +68,13 @@ export function CartProvider({
         );
       }
 
-      return [...prev, { ...item, quantity: 1 }];
+      return [
+        ...prev,
+        {
+          ...item,
+          quantity: 1,
+        },
+      ];
     });
   };
 
@@ -93,7 +107,9 @@ export function CartProvider({
   };
 
   const removeFromCart = (id: number) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
+    setCart((prev) =>
+      prev.filter((item) => item.id !== id)
+    );
   };
 
   const clearCart = () => {
@@ -120,7 +136,9 @@ export function useCart() {
   const context = useContext(CartContext);
 
   if (!context) {
-    throw new Error("useCart must be used inside CartProvider");
+    throw new Error(
+      "useCart must be used inside CartProvider"
+    );
   }
 
   return context;

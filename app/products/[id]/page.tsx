@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { products } from "@/lib/products";
 import { notFound } from "next/navigation";
 import AddToCartButton from "@/components/AddToCartButton";
@@ -8,7 +9,9 @@ type Props = {
   }>;
 };
 
-export default async function ProductPage({ params }: Props) {
+export default async function ProductPage({
+  params,
+}: Props) {
   const { id } = await params;
 
   const product = products.find(
@@ -22,7 +25,14 @@ export default async function ProductPage({ params }: Props) {
   return (
     <main className="mx-auto max-w-6xl px-8 py-16">
       <div className="grid gap-10 md:grid-cols-2">
-        <div className="h-[600px] rounded-xl bg-gray-100"></div>
+        <div className="relative h-[600px] overflow-hidden rounded-xl bg-gray-100">
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            className="object-cover"
+          />
+        </div>
 
         <div>
           <h1 className="text-5xl font-bold">
@@ -41,6 +51,7 @@ export default async function ProductPage({ params }: Props) {
             id={product.id}
             name={product.name}
             price={product.price}
+            image={product.image}
           />
         </div>
       </div>

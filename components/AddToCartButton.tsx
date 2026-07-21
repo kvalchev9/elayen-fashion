@@ -6,12 +6,14 @@ type Props = {
   id: number;
   name: string;
   price: number;
+  image: string;
 };
 
 export default function AddToCartButton({
   id,
   name,
   price,
+  image,
 }: Props) {
   const { addToCart } = useCart();
 
@@ -22,6 +24,7 @@ export default function AddToCartButton({
           id,
           name,
           price,
+          image,
         });
       }}
       className="mt-10 rounded-lg bg-black px-8 py-4 text-white transition hover:bg-gray-800"
