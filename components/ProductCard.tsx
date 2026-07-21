@@ -1,19 +1,35 @@
 import Image from "next/image";
+import Link from "next/link";
+import WishlistButton from "./WishlistButton";
 
 type ProductCardProps = {
+  id: number;
   title: string;
-  price: string;
+  price: number;
   image: string;
 };
 
 export default function ProductCard({
+  id,
   title,
   price,
   image,
 }: ProductCardProps) {
   return (
-    <div className="group cursor-pointer">
+    <Link
+      href={`/products/${id}`}
+      className="group block cursor-pointer"
+    >
       <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-gray-100">
+        <WishlistButton
+          product={{
+            id,
+            name: title,
+            price,
+            image,
+          }}
+        />
+
         <Image
           src={image}
           alt={title}
@@ -31,9 +47,9 @@ export default function ProductCard({
         </h3>
 
         <p className="mt-1 text-gray-600">
-          {price}
+          {price.toFixed(2)} лв.
         </p>
       </div>
-    </div>
+    </Link>
   );
 }

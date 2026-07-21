@@ -14,8 +14,9 @@ export default function FeaturedProducts() {
         {featuredProducts.map((product) => (
           <ProductCard
             key={product.id}
+            id={product.id}
             title={product.name}
-            price={`${product.price} лв.`}
+            price={product.price}
             image={product.image}
           />
         ))}
