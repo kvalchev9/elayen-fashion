@@ -4,7 +4,9 @@ import "./globals.css";
 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+
 import { CartProvider } from "@/context/CartContext";
+import { WishlistProvider } from "@/context/WishlistContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,24 +25,26 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html
       lang="bg"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-black text-white">
-        <CartProvider>
-          <Navbar />
+        <WishlistProvider>
+          <CartProvider>
+            <Navbar />
 
-          <main className="flex-1">
-            {children}
-          </main>
+            <main className="flex-1">
+              {children}
+            </main>
 
-          <Footer />
-        </CartProvider>
+            <Footer />
+          </CartProvider>
+        </WishlistProvider>
       </body>
     </html>
   );
