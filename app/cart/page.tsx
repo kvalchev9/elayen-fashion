@@ -51,6 +51,7 @@ export default function CartPage() {
                     alt={item.name}
                     fill
                     className="object-cover"
+                    sizes="96px"
                   />
                 </div>
 
@@ -111,12 +112,21 @@ export default function CartPage() {
               Общо: {total.toFixed(2)} лв.
             </h2>
 
-            <button
-              onClick={clearCart}
-              className="mt-6 rounded bg-black px-6 py-3 text-white"
-            >
-              Изчисти количката
-            </button>
+            <div className="mt-6 flex flex-wrap gap-4">
+              <button
+                onClick={clearCart}
+                className="rounded bg-black px-6 py-3 text-white"
+              >
+                Изчисти количката
+              </button>
+
+              <Link
+                href="/checkout"
+                className="rounded bg-white px-6 py-3 text-black"
+              >
+                Продължи към поръчка
+              </Link>
+            </div>
           </div>
         </>
       )}
