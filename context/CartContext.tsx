@@ -31,8 +31,6 @@ type CartItem = {
 
 
 
-
-
 type CartContextType = {
 
   cart: CartItem[];
@@ -69,12 +67,8 @@ type CartContextType = {
 
 
 
-
-
 const CartContext =
   createContext<CartContextType | null>(null);
-
-
 
 
 
@@ -87,13 +81,8 @@ export function CartProvider({
 }) {
 
 
-
   const [cart, setCart] =
     useState<CartItem[]>([]);
-
-
-
-
 
 
 
@@ -116,9 +105,6 @@ export function CartProvider({
 
 
 
-
-
-
   useEffect(() => {
 
     localStorage.setItem(
@@ -132,19 +118,12 @@ export function CartProvider({
 
 
 
-
-
-
-
-
   const addToCart = (
     item: Omit<CartItem, "quantity">
   ) => {
 
 
-
     setCart((prev) => {
-
 
 
       const existing = prev.find(
@@ -158,9 +137,6 @@ export function CartProvider({
           p.color === item.color
 
       );
-
-
-
 
 
 
@@ -202,9 +178,6 @@ export function CartProvider({
 
 
 
-
-
-
       return [
 
         ...prev,
@@ -220,14 +193,10 @@ export function CartProvider({
       ];
 
 
-
     });
 
 
-
   };
-
-
 
 
 
@@ -246,13 +215,10 @@ export function CartProvider({
   ) => {
 
 
-
     setCart((prev) =>
 
 
-
       prev.map((item) =>
-
 
 
         item.id === id &&
@@ -260,7 +226,6 @@ export function CartProvider({
         item.size === size &&
 
         item.color === color
-
 
 
           ? {
@@ -277,21 +242,16 @@ export function CartProvider({
             }
 
 
-
           : item
 
 
-
       )
-
 
 
     );
 
 
   };
-
-
 
 
 
@@ -308,7 +268,6 @@ export function CartProvider({
     color?: string
 
   ) => {
-
 
 
     setCart((prev) =>
@@ -337,7 +296,6 @@ export function CartProvider({
               }
 
 
-
             : item
 
 
@@ -353,12 +311,10 @@ export function CartProvider({
         )
 
 
-
     );
 
+
   };
-
-
 
 
 
@@ -375,7 +331,6 @@ export function CartProvider({
     color?: string
 
   ) => {
-
 
 
     setCart((prev) =>
@@ -409,10 +364,11 @@ export function CartProvider({
 
 
 
-
   const clearCart = () => {
 
     setCart([]);
+
+    localStorage.removeItem("cart");
 
   };
 
@@ -422,16 +378,11 @@ export function CartProvider({
 
 
 
-
-
   return (
-
 
     <CartContext.Provider
 
-
       value={{
-
 
         cart,
 
@@ -445,23 +396,18 @@ export function CartProvider({
 
         clearCart,
 
-
       }}
-
 
     >
 
-
       {children}
-
 
     </CartContext.Provider>
 
-
   );
 
-}
 
+}
 
 
 
@@ -472,11 +418,9 @@ export function CartProvider({
 export function useCart() {
 
 
-
   const context =
 
     useContext(CartContext);
-
 
 
 
@@ -492,7 +436,6 @@ export function useCart() {
 
 
   }
-
 
 
 
