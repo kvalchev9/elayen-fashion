@@ -18,7 +18,6 @@ type Props = {
 };
 
 
-
 export default function EditProductForm({
   product,
 }: Props) {
@@ -46,6 +45,9 @@ export default function EditProductForm({
   });
 
 
+  const [file, setFile] = useState<File | null>(null);
+
+
 
   function update(
     field: string,
@@ -53,12 +55,43 @@ export default function EditProductForm({
   ) {
 
     setForm({
-
       ...form,
-
       [field]: value,
+    });
+
+  }
+
+
+
+
+  async function uploadImage() {
+
+    if (!file) {
+      return form.image;
+    }
+
+
+    const data = new FormData();
+
+    data.append(
+      "file",
+      file
+    );
+
+
+    const res = await fetch("/api/upload", {
+
+      method: "POST",
+
+      body: data,
 
     });
+
+
+    const result = await res.json();
+
+
+    return result.url;
 
   }
 
@@ -73,18 +106,26 @@ export default function EditProductForm({
 
 
 
+    const imageUrl = await uploadImage();
+
+
+
     await fetch(`/api/products/${product.id}`, {
 
       method: "PUT",
 
       headers: {
-
         "Content-Type": "application/json",
-
       },
 
 
-      body: JSON.stringify(form),
+      body: JSON.stringify({
+
+        ...form,
+
+        image: imageUrl,
+
+      }),
 
     });
 
@@ -95,6 +136,7 @@ export default function EditProductForm({
     router.refresh();
 
   }
+
 
 
 
@@ -121,6 +163,7 @@ export default function EditProductForm({
 
       <input
         className="w-full rounded border p-3 text-black"
+        type="number"
         value={form.price}
         onChange={(e)=>
           update("price", e.target.value)
@@ -163,14 +206,26 @@ export default function EditProductForm({
 
 
 
-      <input
-        className="w-full rounded border p-3 text-black"
-        value={form.image}
-        onChange={(e)=>
-          update("image", e.target.value)
-        }
-        placeholder="Снимка URL"
-      />
+      <div className="rounded border p-3">
+
+        <p className="mb-2 text-white">
+          Смени снимка:
+        </p>
+
+
+        <input
+          type="file"
+          accept="image/*"
+          className="text-white"
+          onChange={(e)=>
+            setFile(
+              e.target.files?.[0] ?? null
+            )
+          }
+        />
+
+      </div>
+
 
 
 
