@@ -6,9 +6,7 @@ export async function POST(req: Request) {
 
   try {
 
-
     const body = await req.json();
-
 
 
     const order = await prisma.order.findUnique({
@@ -18,7 +16,6 @@ export async function POST(req: Request) {
       },
 
     });
-
 
 
 
@@ -38,6 +35,20 @@ export async function POST(req: Request) {
 
 
 
+    // ако вече е отказана - не връщаме stock пак
+
+    if (order.status === "Отказана") {
+
+      return NextResponse.json({
+
+        success: false,
+        error: "Stock already restored"
+
+      });
+
+    }
+
+
 
 
     const products = JSON.parse(order.products);
@@ -45,8 +56,7 @@ export async function POST(req: Request) {
 
 
 
-
-    // връщаме наличността обратно
+    // връщаме наличността
 
     for (const item of products) {
 
@@ -54,9 +64,10 @@ export async function POST(req: Request) {
       await prisma.product.update({
 
         where: {
-          id: item.id,
-        },
 
+          id: item.id,
+
+        },
 
         data: {
 
@@ -68,7 +79,6 @@ export async function POST(req: Request) {
 
         },
 
-
       });
 
 
@@ -78,19 +88,23 @@ export async function POST(req: Request) {
 
 
 
+    // маркираме като отказана
 
-    // след това трием поръчката
-
-    await prisma.order.delete({
+    await prisma.order.update({
 
       where: {
 
-        id: Number(body.id),
+        id: order.id,
+
+      },
+
+      data: {
+
+        status: "Отказана",
 
       },
 
     });
-
 
 
 
@@ -104,24 +118,27 @@ export async function POST(req: Request) {
 
 
 
-
-
   } catch (error) {
 
 
-    console.error(error);
+    console.error("DELETE ORDER ERROR:", error);
 
 
 
     return NextResponse.json(
 
       {
+
         success: false,
+
         error: "Delete error",
+
       },
 
       {
+
         status: 500,
+
       }
 
     );
