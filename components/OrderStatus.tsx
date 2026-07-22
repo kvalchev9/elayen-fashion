@@ -12,10 +12,14 @@ const statuses = [
   "Обработва се",
   "Изпратена",
   "Завършена",
+  "Отказана",
 ];
 
+
 function getStatusStyle(status: string) {
+
   switch (status) {
+
     case "Нова":
       return "bg-yellow-500 text-black";
 
@@ -28,77 +32,124 @@ function getStatusStyle(status: string) {
     case "Завършена":
       return "bg-green-600 text-white";
 
+    case "Отказана":
+      return "bg-red-600 text-white";
+
     default:
       return "bg-black text-white";
+
   }
+
 }
+
+
 
 export default function OrderStatus({
   id,
   currentStatus,
 }: Props) {
 
-  const [status, setStatus] = useState(currentStatus);
-  const [loading, setLoading] = useState(false);
+
+  const [status, setStatus] =
+    useState(currentStatus);
+
+
+  const [loading, setLoading] =
+    useState(false);
+
+
 
 
   async function changeStatus(
     e: React.ChangeEvent<HTMLSelectElement>
   ) {
 
+
     const newStatus = e.target.value;
+
 
     setLoading(true);
 
 
-    const response = await fetch("/api/orders/status", {
-      method: "POST",
 
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const response = await fetch(
+      "/api/orders/status",
+      {
+        method: "POST",
 
-      body: JSON.stringify({
-        id,
-        status: newStatus,
-      }),
-    });
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+
+        body: JSON.stringify({
+          id,
+          status: newStatus,
+        }),
+
+      }
+    );
+
+
 
 
     if (response.ok) {
+
       setStatus(newStatus);
 
-      // обновява статистиките горе
       window.location.reload();
+
     }
 
 
+
     setLoading(false);
+
   }
 
 
+
+
+
   return (
+
     <select
+
       value={status}
+
       onChange={changeStatus}
+
       disabled={loading}
+
       className={`rounded-lg px-4 py-2 font-semibold ${getStatusStyle(
         status
       )}`}
+
     >
+
 
       {statuses.map((item) => (
 
         <option
+
           key={item}
+
           value={item}
+
           className="bg-black text-white"
+
         >
+
           {item}
+
         </option>
+
 
       ))}
 
+
     </select>
+
   );
+
 }
