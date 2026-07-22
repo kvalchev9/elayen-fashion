@@ -9,6 +9,7 @@ type Props = {
     id: number;
     name: string;
     price: number;
+    oldPrice: number | null;
     category: string;
     image: string;
     sizes: string;
@@ -31,6 +32,10 @@ export default function EditProductForm({
     name: product.name,
 
     price: String(product.price),
+
+    oldPrice: product.oldPrice
+      ? String(product.oldPrice)
+      : "",
 
     category: product.category,
 
@@ -98,12 +103,12 @@ export default function EditProductForm({
 
 
 
+
   async function handleSubmit(
     e: React.FormEvent
   ) {
 
     e.preventDefault();
-
 
 
     const imageUrl = await uploadImage();
@@ -122,6 +127,10 @@ export default function EditProductForm({
       body: JSON.stringify({
 
         ...form,
+
+        oldPrice: form.oldPrice
+          ? Number(form.oldPrice)
+          : null,
 
         image: imageUrl,
 
@@ -164,11 +173,25 @@ export default function EditProductForm({
       <input
         className="w-full rounded border p-3 text-black"
         type="number"
+        step="0.01"
         value={form.price}
         onChange={(e)=>
           update("price", e.target.value)
         }
-        placeholder="Цена"
+        placeholder="Цена (€)"
+      />
+
+
+
+      <input
+        className="w-full rounded border p-3 text-black"
+        type="number"
+        step="0.01"
+        value={form.oldPrice}
+        onChange={(e)=>
+          update("oldPrice", e.target.value)
+        }
+        placeholder="Стара цена (€)"
       />
 
 
@@ -206,6 +229,8 @@ export default function EditProductForm({
 
 
 
+
+
       <div className="rounded border p-3">
 
         <p className="mb-2 text-white">
@@ -229,6 +254,7 @@ export default function EditProductForm({
 
 
 
+
       <textarea
         className="w-full rounded border p-3 text-black"
         value={form.description}
@@ -237,6 +263,7 @@ export default function EditProductForm({
         }
         placeholder="Описание"
       />
+
 
 
 

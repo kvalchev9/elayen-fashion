@@ -134,7 +134,6 @@ export default async function OrdersPage({
       <div className="mb-8 grid gap-5 md:grid-cols-3">
 
 
-
         <div className="rounded-xl border p-5">
           <p className="text-gray-500">
             Общо поръчки
@@ -170,7 +169,7 @@ export default async function OrdersPage({
           </p>
 
           <h2 className="text-3xl font-bold">
-            {totalRevenue.toFixed(2)} лв.
+            {totalRevenue.toFixed(2)} €
           </h2>
 
         </div>
@@ -333,8 +332,6 @@ export default async function OrdersPage({
 
 
 
-
-
                 <div className="mt-5 space-y-2">
 
 
@@ -381,9 +378,8 @@ export default async function OrdersPage({
 
 
                   <p>
-                    <b>Сума:</b> {order.total.toFixed(2)} лв.
+                    <b>Сума:</b> {order.total.toFixed(2)} €
                   </p>
-
 
 
 
@@ -402,7 +398,7 @@ export default async function OrdersPage({
                   <div className="rounded bg-gray-100 p-4 text-black">
 
 
-                    {products.map((product:any, index:number)=>(
+                    {products.map((product:any, index:number)=> (
 
 
                       <div

@@ -31,6 +31,7 @@ export default function CheckoutPage() {
 
 
 
+
   function handleChange(
     e: React.ChangeEvent<
       HTMLInputElement |
@@ -45,6 +46,7 @@ export default function CheckoutPage() {
     });
 
   }
+
 
 
 
@@ -64,6 +66,7 @@ export default function CheckoutPage() {
 
 
 
+
     const response = await fetch(
       "/api/orders",
       {
@@ -73,17 +76,20 @@ export default function CheckoutPage() {
           "Content-Type": "application/json",
         },
 
+
         body: JSON.stringify({
           ...form,
           products: cart,
           total,
         }),
+
       }
     );
 
 
 
     const data = await response.json();
+
 
 
 
@@ -96,7 +102,6 @@ export default function CheckoutPage() {
     }
 
   }
-
 
 
 
@@ -289,12 +294,14 @@ export default function CheckoutPage() {
 
 
 
+
         <div className="rounded-xl border p-6">
 
 
           <h2 className="mb-6 text-2xl font-bold">
             Обобщение
           </h2>
+
 
 
 
@@ -316,7 +323,7 @@ export default function CheckoutPage() {
 
 
                 <span>
-                  {(item.price * item.quantity).toFixed(2)} лв.
+                  {(item.price * item.quantity).toFixed(2)} €
                 </span>
 
               </div>
@@ -352,7 +359,7 @@ export default function CheckoutPage() {
           <div className="mt-6 border-t pt-6">
 
             <p className="text-2xl font-bold">
-              Общо: {total.toFixed(2)} лв.
+              Общо: {total.toFixed(2)} €
             </p>
 
           </div>

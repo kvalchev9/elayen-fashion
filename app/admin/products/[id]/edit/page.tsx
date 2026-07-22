@@ -8,6 +8,7 @@ type Props = {
   }>;
 };
 
+
 export default async function EditProductPage({
   params,
 }: Props) {
@@ -27,8 +28,10 @@ export default async function EditProductPage({
   }
 
 
+
   return (
     <main className="mx-auto max-w-xl px-8 py-16">
+
 
       <h1 className="mb-8 text-4xl font-bold text-white">
         Редактирай продукт
@@ -36,7 +39,10 @@ export default async function EditProductPage({
 
 
       <EditProductForm
-        product={product}
+        product={{
+          ...product,
+          oldPrice: product.oldPrice ?? null,
+        }}
       />
 
 

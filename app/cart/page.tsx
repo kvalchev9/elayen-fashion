@@ -85,6 +85,7 @@ export default function CartPage() {
 
 
 
+
                 <div className="flex-1">
 
 
@@ -94,7 +95,7 @@ export default function CartPage() {
 
 
                   <p className="mt-2">
-                    {item.price.toFixed(2)} лв.
+                    {item.price.toFixed(2)} €
                   </p>
 
 
@@ -112,6 +113,7 @@ export default function CartPage() {
                       Цвят: {item.color}
                     </p>
                   )}
+
 
 
 
@@ -166,11 +168,12 @@ export default function CartPage() {
 
 
 
+
                 <div className="text-right">
 
 
                   <p className="mb-4 text-xl font-bold">
-                    {(item.price * item.quantity).toFixed(2)} лв.
+                    {(item.price * item.quantity).toFixed(2)} €
                   </p>
 
 
@@ -206,12 +209,15 @@ export default function CartPage() {
 
 
 
+
+
           <div className="mt-10 border-t pt-6">
 
 
             <h2 className="text-2xl font-bold">
-              Общо: {total.toFixed(2)} лв.
+              Общо: {total.toFixed(2)} €
             </h2>
+
 
 
 
@@ -225,6 +231,7 @@ export default function CartPage() {
               >
                 Изчисти количката
               </button>
+
 
 
 

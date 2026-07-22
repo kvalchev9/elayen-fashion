@@ -4,13 +4,16 @@ type Props = {
   id: number;
   title: string;
   price: number;
+  oldPrice?: number | null;
   image: string;
 };
+
 
 export default function ProductCard({
   id,
   title,
   price,
+  oldPrice,
   image,
 }: Props) {
 
@@ -38,9 +41,34 @@ export default function ProductCard({
       </h2>
 
 
-      <p className="mt-2 text-lg">
-        {price.toFixed(2)} лв.
-      </p>
+
+      <div className="mt-2">
+
+        {oldPrice && oldPrice > price ? (
+
+          <>
+
+            <p className="text-sm text-gray-500 line-through">
+              {oldPrice.toFixed(2)} €
+            </p>
+
+
+            <p className="text-lg font-bold text-red-600">
+              {price.toFixed(2)} €
+            </p>
+
+
+          </>
+
+        ) : (
+
+          <p className="text-lg">
+            {price.toFixed(2)} €
+          </p>
+
+        )}
+
+      </div>
 
 
     </Link>

@@ -84,15 +84,45 @@ export default async function ProductPage({
 
 
 
-          <p className="mt-6 text-3xl font-semibold">
-            {product.price.toFixed(2)} лв.
-          </p>
+
+          <div className="mt-6">
+
+
+            {product.oldPrice &&
+            product.oldPrice > product.price ? (
+
+              <>
+
+                <p className="text-2xl text-gray-500 line-through">
+                  {product.oldPrice.toFixed(2)} €
+                </p>
+
+
+                <p className="text-3xl font-semibold text-red-600">
+                  {product.price.toFixed(2)} €
+                </p>
+
+
+              </>
+
+            ) : (
+
+              <p className="text-3xl font-semibold">
+                {product.price.toFixed(2)} €
+              </p>
+
+            )}
+
+
+          </div>
+
 
 
 
           <p className="mt-3 text-gray-500">
             {product.category}
           </p>
+
 
 
 
