@@ -10,6 +10,7 @@ type Props = {
     name: string;
     price: number;
     oldPrice: number | null;
+    stock: number;
     category: string;
     image: string;
     sizes: string;
@@ -19,12 +20,14 @@ type Props = {
 };
 
 
+
 export default function EditProductForm({
   product,
 }: Props) {
 
 
   const router = useRouter();
+
 
 
   const [form, setForm] = useState({
@@ -36,6 +39,8 @@ export default function EditProductForm({
     oldPrice: product.oldPrice
       ? String(product.oldPrice)
       : "",
+
+    stock: String(product.stock),
 
     category: product.category,
 
@@ -50,7 +55,10 @@ export default function EditProductForm({
   });
 
 
+
+
   const [file, setFile] = useState<File | null>(null);
+
 
 
 
@@ -60,8 +68,11 @@ export default function EditProductForm({
   ) {
 
     setForm({
+
       ...form,
+
       [field]: value,
+
     });
 
   }
@@ -69,19 +80,28 @@ export default function EditProductForm({
 
 
 
+
   async function uploadImage() {
 
+
     if (!file) {
+
       return form.image;
+
     }
 
 
+
     const data = new FormData();
+
+
 
     data.append(
       "file",
       file
     );
+
+
 
 
     const res = await fetch("/api/upload", {
@@ -93,12 +113,18 @@ export default function EditProductForm({
     });
 
 
+
+
     const result = await res.json();
+
 
 
     return result.url;
 
+
   }
+
+
 
 
 
@@ -108,10 +134,15 @@ export default function EditProductForm({
     e: React.FormEvent
   ) {
 
+
     e.preventDefault();
 
 
+
+
     const imageUrl = await uploadImage();
+
+
 
 
 
@@ -119,24 +150,39 @@ export default function EditProductForm({
 
       method: "PUT",
 
+
       headers: {
+
         "Content-Type": "application/json",
+
       },
+
 
 
       body: JSON.stringify({
 
         ...form,
 
+
+        price: Number(form.price),
+
+
         oldPrice: form.oldPrice
           ? Number(form.oldPrice)
           : null,
+
+
+        stock: Number(form.stock),
+
 
         image: imageUrl,
 
       }),
 
+
     });
+
+
 
 
 
@@ -144,7 +190,11 @@ export default function EditProductForm({
 
     router.refresh();
 
+
   }
+
+
+
 
 
 
@@ -152,10 +202,12 @@ export default function EditProductForm({
 
   return (
 
+
     <form
       onSubmit={handleSubmit}
       className="space-y-4"
     >
+
 
 
 
@@ -167,6 +219,8 @@ export default function EditProductForm({
         }
         placeholder="Име"
       />
+
+
 
 
 
@@ -183,6 +237,8 @@ export default function EditProductForm({
 
 
 
+
+
       <input
         className="w-full rounded border p-3 text-black"
         type="number"
@@ -193,6 +249,22 @@ export default function EditProductForm({
         }
         placeholder="Стара цена (€)"
       />
+
+
+
+
+
+      <input
+        className="w-full rounded border p-3 text-black"
+        type="number"
+        value={form.stock}
+        onChange={(e)=>
+          update("stock", e.target.value)
+        }
+        placeholder="Наличност"
+      />
+
+
 
 
 
@@ -207,6 +279,8 @@ export default function EditProductForm({
 
 
 
+
+
       <input
         className="w-full rounded border p-3 text-black"
         value={form.sizes}
@@ -215,6 +289,8 @@ export default function EditProductForm({
         }
         placeholder="Размери (S,M,L,XL)"
       />
+
+
 
 
 
@@ -231,11 +307,14 @@ export default function EditProductForm({
 
 
 
+
       <div className="rounded border p-3">
+
 
         <p className="mb-2 text-white">
           Смени снимка:
         </p>
+
 
 
         <input
@@ -249,7 +328,10 @@ export default function EditProductForm({
           }
         />
 
+
       </div>
+
+
 
 
 
@@ -267,6 +349,8 @@ export default function EditProductForm({
 
 
 
+
+
       <button
         className="w-full rounded bg-black p-3 text-white"
       >
@@ -275,7 +359,10 @@ export default function EditProductForm({
 
 
 
+
     </form>
 
+
   );
+
 }

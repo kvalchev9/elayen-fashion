@@ -152,6 +152,10 @@ export async function PUT(
 
 
 
+        stock: Number(body.stock) || 0,
+
+
+
         category: body.category,
 
 
@@ -177,6 +181,7 @@ export async function PUT(
 
 
 
+
     return NextResponse.json({
 
       success: true,
@@ -184,6 +189,7 @@ export async function PUT(
       product,
 
     });
+
 
 
 

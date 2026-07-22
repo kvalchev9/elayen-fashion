@@ -12,6 +12,7 @@ export default function NewProductPage() {
     name: "",
     price: "",
     oldPrice: "",
+    stock: "0",
     category: "",
     sizes: "",
     colors: "",
@@ -28,10 +29,12 @@ export default function NewProductPage() {
     field: string,
     value: string
   ) {
+
     setForm({
       ...form,
       [field]: value,
     });
+
   }
 
 
@@ -44,22 +47,29 @@ export default function NewProductPage() {
 
     const data = new FormData();
 
+
     data.append(
       "file",
       file
     );
 
 
+
     const res = await fetch("/api/upload", {
+
       method: "POST",
+
       body: data,
+
     });
+
 
 
     const result = await res.json();
 
 
     return result.url;
+
   }
 
 
@@ -73,7 +83,9 @@ export default function NewProductPage() {
     e.preventDefault();
 
 
+
     const imageUrl = await uploadImage();
+
 
 
 
@@ -81,18 +93,28 @@ export default function NewProductPage() {
 
       method: "POST",
 
+
       headers: {
         "Content-Type": "application/json",
       },
+
 
 
       body: JSON.stringify({
 
         ...form,
 
+
+        price: Number(form.price),
+
+
         oldPrice: form.oldPrice
           ? Number(form.oldPrice)
           : null,
+
+
+        stock: Number(form.stock),
+
 
         image: imageUrl,
 
@@ -102,7 +124,10 @@ export default function NewProductPage() {
 
 
 
+
+
     const data = await res.json();
+
 
 
 
@@ -120,6 +145,8 @@ export default function NewProductPage() {
 
 
 
+
+
   return (
 
     <main className="mx-auto max-w-xl px-8 py-16">
@@ -131,10 +158,12 @@ export default function NewProductPage() {
 
 
 
+
       <form
         onSubmit={handleSubmit}
         className="space-y-4"
       >
+
 
 
 
@@ -146,6 +175,8 @@ export default function NewProductPage() {
             update("name", e.target.value)
           }
         />
+
+
 
 
 
@@ -162,8 +193,10 @@ export default function NewProductPage() {
 
 
 
+
+
         <input
-          placeholder="Стара цена (€) - по желание"
+          placeholder="Стара цена (€)"
           type="number"
           step="0.01"
           className="w-full rounded border p-3 text-black"
@@ -172,6 +205,22 @@ export default function NewProductPage() {
             update("oldPrice", e.target.value)
           }
         />
+
+
+
+
+
+        <input
+          placeholder="Наличност"
+          type="number"
+          className="w-full rounded border p-3 text-black"
+          value={form.stock}
+          onChange={(e)=>
+            update("stock", e.target.value)
+          }
+        />
+
+
 
 
 
@@ -186,6 +235,8 @@ export default function NewProductPage() {
 
 
 
+
+
         <input
           placeholder="Размери (пример: S,M,L,XL)"
           className="w-full rounded border p-3 text-black"
@@ -197,6 +248,8 @@ export default function NewProductPage() {
 
 
 
+
+
         <input
           placeholder="Цветове (пример: Черен,Бял,Сив)"
           className="w-full rounded border p-3 text-black"
@@ -205,6 +258,8 @@ export default function NewProductPage() {
             update("colors", e.target.value)
           }
         />
+
+
 
 
 
@@ -221,6 +276,8 @@ export default function NewProductPage() {
 
 
 
+
+
         <textarea
           placeholder="Описание"
           className="w-full rounded border p-3 text-black"
@@ -232,11 +289,14 @@ export default function NewProductPage() {
 
 
 
+
+
         <button
           className="w-full rounded bg-black p-3 text-white"
         >
           Запази продукт
         </button>
+
 
 
       </form>
@@ -245,4 +305,5 @@ export default function NewProductPage() {
     </main>
 
   );
+
 }

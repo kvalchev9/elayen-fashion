@@ -10,16 +10,26 @@ import {
 
 
 type CartItem = {
+
   id: number;
+
   name: string;
+
   price: number;
+
   image: string;
 
+  stock: number;
+
   size?: string;
+
   color?: string;
 
   quantity: number;
+
 };
+
+
 
 
 
@@ -59,8 +69,13 @@ type CartContextType = {
 
 
 
+
+
 const CartContext =
   createContext<CartContextType | null>(null);
+
+
+
 
 
 
@@ -72,8 +87,12 @@ export function CartProvider({
 }) {
 
 
+
   const [cart, setCart] =
     useState<CartItem[]>([]);
+
+
+
 
 
 
@@ -98,6 +117,8 @@ export function CartProvider({
 
 
 
+
+
   useEffect(() => {
 
     localStorage.setItem(
@@ -113,55 +134,96 @@ export function CartProvider({
 
 
 
+
+
+
   const addToCart = (
     item: Omit<CartItem, "quantity">
   ) => {
 
 
+
     setCart((prev) => {
 
 
+
       const existing = prev.find(
+
         (p) =>
+
           p.id === item.id &&
+
           p.size === item.size &&
+
           p.color === item.color
+
       );
+
+
+
 
 
 
       if (existing) {
 
+
         return prev.map((p) =>
 
+
           p.id === item.id &&
+
           p.size === item.size &&
+
           p.color === item.color
 
+
             ? {
+
                 ...p,
+
                 quantity:
-                  p.quantity + 1,
+
+                  Math.min(
+                    p.quantity + 1,
+                    p.stock
+                  ),
+
               }
+
 
             : p
 
+
         );
+
 
       }
 
 
 
 
+
+
+
       return [
+
         ...prev,
+
         {
+
           ...item,
+
           quantity: 1,
+
         },
+
       ];
 
+
+
     });
+
+
 
   };
 
@@ -174,31 +236,58 @@ export function CartProvider({
 
 
   const increaseQuantity = (
+
     id: number,
+
     size?: string,
+
     color?: string
+
   ) => {
+
 
 
     setCart((prev) =>
 
+
+
       prev.map((item) =>
 
+
+
         item.id === id &&
+
         item.size === size &&
+
         item.color === color
 
+
+
           ? {
+
               ...item,
+
               quantity:
-                item.quantity + 1,
+
+                Math.min(
+                  item.quantity + 1,
+                  item.stock
+                ),
+
             }
+
+
 
           : item
 
+
+
       )
 
+
+
     );
+
 
   };
 
@@ -211,36 +300,59 @@ export function CartProvider({
 
 
   const decreaseQuantity = (
+
     id: number,
+
     size?: string,
+
     color?: string
+
   ) => {
 
 
+
     setCart((prev) =>
+
 
       prev
 
         .map((item) =>
 
+
           item.id === id &&
+
           item.size === size &&
+
           item.color === color
 
+
             ? {
+
                 ...item,
+
                 quantity:
+
                   item.quantity - 1,
+
               }
+
+
 
             : item
 
+
         )
 
+
         .filter(
+
           (item) =>
+
             item.quantity > 0
+
         )
+
+
 
     );
 
@@ -255,26 +367,42 @@ export function CartProvider({
 
 
   const removeFromCart = (
+
     id: number,
+
     size?: string,
+
     color?: string
+
   ) => {
+
 
 
     setCart((prev) =>
 
+
       prev.filter(
+
         (item) =>
+
           !(
+
             item.id === id &&
+
             item.size === size &&
+
             item.color === color
+
           )
+
       )
+
 
     );
 
+
   };
+
 
 
 
@@ -294,11 +422,16 @@ export function CartProvider({
 
 
 
+
+
   return (
+
 
     <CartContext.Provider
 
+
       value={{
+
 
         cart,
 
@@ -312,13 +445,18 @@ export function CartProvider({
 
         clearCart,
 
+
       }}
+
 
     >
 
+
       {children}
 
+
     </CartContext.Provider>
+
 
   );
 
@@ -330,24 +468,36 @@ export function CartProvider({
 
 
 
+
 export function useCart() {
 
 
+
   const context =
+
     useContext(CartContext);
+
+
 
 
 
   if (!context) {
 
+
     throw new Error(
+
       "useCart must be used inside CartProvider"
+
     );
+
 
   }
 
 
 
+
+
   return context;
+
 
 }

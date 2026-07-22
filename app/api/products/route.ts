@@ -2,102 +2,50 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 
-function checkAdmin(request: Request) {
-
-  const cookie = request.headers.get("cookie");
-
-  return cookie?.includes("admin_auth=");
-
-}
-
-
-
-
 export async function POST(request: Request) {
 
-
-  if (!checkAdmin(request)) {
-
-    return NextResponse.json(
-      {
-        error: "Unauthorized",
-      },
-      {
-        status: 401,
-      }
-    );
-
-  }
+  const body = await request.json();
 
 
+  const product = await prisma.product.create({
 
-  try {
+    data: {
 
-    const body = await request.json();
+      name: body.name,
+
+      price: Number(body.price),
+
+      oldPrice: body.oldPrice
+        ? Number(body.oldPrice)
+        : null,
 
 
+      stock: Number(body.stock) || 0,
 
-    const product = await prisma.product.create({
 
-      data: {
+      category: body.category,
 
-        name: body.name,
+      sizes: body.sizes || "",
 
-        price: Number(body.price),
+      colors: body.colors || "",
 
-        oldPrice: body.oldPrice
-          ? Number(body.oldPrice)
-          : null,
+      image: body.image,
 
-        category: body.category,
+      description: body.description || "",
 
-        sizes: body.sizes || "",
+    },
 
-        colors: body.colors || "",
-
-        image: body.image,
-
-        description: body.description || "",
-
-      },
-
-    });
+  });
 
 
 
+  return NextResponse.json({
 
-    return NextResponse.json({
+    success: true,
 
-      success: true,
+    product,
 
-      product,
-
-    });
-
-
-
-  } catch (error) {
-
-
-    console.error(error);
-
-
-
-    return NextResponse.json(
-
-      {
-        success: false,
-        error: "Database error",
-      },
-
-      {
-        status: 500,
-      }
-
-    );
-
-
-  }
+  });
 
 }
 
