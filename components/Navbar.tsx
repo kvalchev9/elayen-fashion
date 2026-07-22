@@ -9,17 +9,23 @@ import {
 } from "lucide-react";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 
-
 export default function Navbar() {
 
-
   const { cart } = useCart();
-
   const { wishlist } = useWishlist();
+
+  const [isAdmin, setIsAdmin] = useState(false);
+
+
+  useEffect(() => {
+    const admin = document.cookie.includes("admin_auth=");
+    setIsAdmin(admin);
+  }, []);
 
 
 
@@ -27,7 +33,6 @@ export default function Navbar() {
     (sum, item) => sum + item.quantity,
     0
   );
-
 
 
   const totalWishlistItems = wishlist.length;
@@ -38,9 +43,7 @@ export default function Navbar() {
 
     <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white shadow-sm">
 
-
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-
 
 
         <button className="md:hidden">
@@ -49,8 +52,6 @@ export default function Navbar() {
             className="text-black"
           />
         </button>
-
-
 
 
 
@@ -64,52 +65,51 @@ export default function Navbar() {
 
 
 
-
-
-
         <nav className="hidden gap-10 text-sm font-medium uppercase text-black md:flex">
-
 
           <Link href="/">
             Начало
           </Link>
 
-
-
           <Link href="/products?category=Дамски">
             Дамски
           </Link>
-
-
 
           <Link href="/products?category=Мъжки">
             Мъжки
           </Link>
 
-
-
           <Link href="/products?category=Аксесоари">
             Аксесоари
           </Link>
-
-
 
           <Link href="/products">
             Намаления
           </Link>
 
 
+          {isAdmin && (
+            <>
+              <Link href="/admin/products">
+                Продукти
+              </Link>
+
+              <Link href="/admin/products/new">
+                + Добави
+              </Link>
+
+              <Link href="/admin/orders">
+                Поръчки
+              </Link>
+            </>
+          )}
+
         </nav>
 
 
 
 
-
-
-
-
         <div className="flex items-center gap-5 text-black">
-
 
 
           <Link
@@ -122,9 +122,6 @@ export default function Navbar() {
 
 
 
-
-
-
           <Link
             href="/wishlist"
             className="relative transition hover:scale-110"
@@ -132,22 +129,13 @@ export default function Navbar() {
 
             <Heart size={20} />
 
-
             {totalWishlistItems > 0 && (
-
-              <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white">
-
+              <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center-justify-center rounded-full bg-red-600 text-xs font-bold text-white">
                 {totalWishlistItems}
-
               </span>
-
             )}
 
           </Link>
-
-
-
-
 
 
 
@@ -159,16 +147,10 @@ export default function Navbar() {
 
             <ShoppingBag size={20} />
 
-
-
             {totalItems > 0 && (
-
               <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white">
-
                 {totalItems}
-
               </span>
-
             )}
 
           </Link>
@@ -176,25 +158,18 @@ export default function Navbar() {
 
 
 
-
-
-
-
-          <Link
-            href="/admin/login"
-            className="transition hover:scale-110"
-          >
-
-            <User size={20} />
-
-          </Link>
-
-
+          {!isAdmin && (
+            <Link
+              href="/admin/login"
+              className="transition hover:scale-110"
+            >
+              <User size={20} />
+            </Link>
+          )}
 
 
 
         </div>
-
 
 
       </div>
@@ -203,5 +178,4 @@ export default function Navbar() {
     </header>
 
   );
-
 }
