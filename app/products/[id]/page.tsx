@@ -1,7 +1,8 @@
 import Image from "next/image";
-import { products } from "@/lib/products";
 import { notFound } from "next/navigation";
+import { prisma } from "@/lib/prisma";
 import AddToCartButton from "@/components/AddToCartButton";
+
 
 type Props = {
   params: Promise<{
@@ -9,52 +10,126 @@ type Props = {
   }>;
 };
 
+
+
 export default async function ProductPage({
   params,
 }: Props) {
+
+
   const { id } = await params;
 
-  const product = products.find(
-    (p) => p.id === Number(id)
-  );
+
+  const product = await prisma.product.findUnique({
+    where: {
+      id: Number(id),
+    },
+  });
+
+
 
   if (!product) {
     notFound();
   }
 
+
+
+  const sizes = product.sizes
+    ? product.sizes.split(",")
+    : [];
+
+
+  const colors = product.colors
+    ? product.colors.split(",")
+    : [];
+
+
+
   return (
     <main className="mx-auto max-w-6xl px-8 py-16">
+
+
       <div className="grid gap-10 md:grid-cols-2">
+
+
+
         <div className="relative h-[600px] overflow-hidden rounded-xl bg-gray-100">
-          <Image
-            src={product.image}
-            alt={product.name}
-            fill
-            className="object-cover"
-          />
+
+
+          {product.image && (
+
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+
+          )}
+
+
         </div>
 
+
+
+
+
         <div>
+
+
           <h1 className="text-5xl font-bold">
             {product.name}
           </h1>
 
+
+
           <p className="mt-6 text-3xl font-semibold">
-            {product.price} лв.
+            {product.price.toFixed(2)} лв.
           </p>
+
+
+
+          <p className="mt-3 text-gray-500">
+            {product.category}
+          </p>
+
+
+
 
           <p className="mt-8 text-gray-600">
             {product.description}
           </p>
 
+
+
+
+
           <AddToCartButton
+
             id={product.id}
+
             name={product.name}
+
             price={product.price}
+
             image={product.image}
+
+            sizes={sizes}
+
+            colors={colors}
+
           />
+
+
+
         </div>
+
+
+
       </div>
+
+
     </main>
   );
 }

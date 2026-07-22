@@ -37,30 +37,45 @@ export default function OrderStatus({
   id,
   currentStatus,
 }: Props) {
+
   const [status, setStatus] = useState(currentStatus);
   const [loading, setLoading] = useState(false);
+
 
   async function changeStatus(
     e: React.ChangeEvent<HTMLSelectElement>
   ) {
+
     const newStatus = e.target.value;
 
-    setStatus(newStatus);
     setLoading(true);
 
-    await fetch("/api/orders/status", {
+
+    const response = await fetch("/api/orders/status", {
       method: "POST",
+
       headers: {
         "Content-Type": "application/json",
       },
+
       body: JSON.stringify({
         id,
         status: newStatus,
       }),
     });
 
+
+    if (response.ok) {
+      setStatus(newStatus);
+
+      // обновява статистиките горе
+      window.location.reload();
+    }
+
+
     setLoading(false);
   }
+
 
   return (
     <select
@@ -71,7 +86,9 @@ export default function OrderStatus({
         status
       )}`}
     >
+
       {statuses.map((item) => (
+
         <option
           key={item}
           value={item}
@@ -79,7 +96,9 @@ export default function OrderStatus({
         >
           {item}
         </option>
+
       ))}
+
     </select>
   );
 }

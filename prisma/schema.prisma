@@ -2,19 +2,76 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
 datasource db {
   provider = "sqlite"
   url      = "file:./dev.db"
 }
 
+
+
 model Order {
-  id        Int      @id @default(autoincrement())
-  name      String
-  phone     String
-  city      String
-  address   String
-  products  String
-  total     Float
-  status    String   @default("Нова")
-  createdAt DateTime @default(now())
+
+  id            Int      @id @default(autoincrement())
+
+
+  name          String
+
+  email         String   @default("")
+
+  phone         String
+
+
+  city          String
+
+  address       String
+
+
+  courier       String   @default("")
+
+  deliveryType  String   @default("")
+
+
+  products      String
+
+  total         Float
+
+
+  status        String   @default("Нова")
+
+
+  createdAt     DateTime @default(now())
+
+}
+
+
+
+
+model Product {
+
+  id          Int      @id @default(autoincrement())
+
+
+  name        String
+
+  price       Float
+
+
+  image       String
+
+
+  category    String
+
+
+  sizes       String   @default("")
+
+
+  colors      String   @default("")
+
+
+  description String?
+
+
+  createdAt   DateTime @default(now())
+
 }

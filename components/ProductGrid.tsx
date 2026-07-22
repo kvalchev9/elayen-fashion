@@ -1,7 +1,14 @@
 import ProductCard from "./ProductCard";
-import { products } from "@/lib/products";
 
-type Product = (typeof products)[number];
+type Product = {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  category: string;
+  description: string | null;
+  createdAt: Date;
+};
 
 type ProductGridProps = {
   products: Product[];
@@ -10,6 +17,7 @@ type ProductGridProps = {
 export default function ProductGrid({
   products,
 }: ProductGridProps) {
+
   if (products.length === 0) {
     return (
       <p className="text-lg text-gray-500">
@@ -18,9 +26,12 @@ export default function ProductGrid({
     );
   }
 
+
   return (
     <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+
       {products.map((product) => (
+
         <ProductCard
           key={product.id}
           id={product.id}
@@ -28,7 +39,9 @@ export default function ProductGrid({
           price={product.price}
           image={product.image}
         />
+
       ))}
+
     </div>
   );
 }

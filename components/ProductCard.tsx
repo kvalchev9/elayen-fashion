@@ -1,8 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
-import WishlistButton from "./WishlistButton";
 
-type ProductCardProps = {
+type Props = {
   id: number;
   title: string;
   price: number;
@@ -14,42 +12,37 @@ export default function ProductCard({
   title,
   price,
   image,
-}: ProductCardProps) {
+}: Props) {
+
   return (
     <Link
       href={`/products/${id}`}
-      className="group block cursor-pointer"
+      className="rounded-xl border p-4"
     >
-      <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-gray-100">
-        <WishlistButton
-          product={{
-            id,
-            name: title,
-            price,
-            image,
-          }}
-        />
 
-        <Image
-          src={image}
-          alt={title}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw,
-                 (max-width: 1200px) 50vw,
-                 25vw"
-        />
+      <div className="h-80 overflow-hidden rounded-lg bg-gray-100">
+
+        {image && (
+          <img
+            src={image}
+            alt={title}
+            className="h-full w-full object-cover"
+          />
+        )}
+
       </div>
 
-      <div className="mt-4">
-        <h3 className="text-lg font-semibold text-black">
-          {title}
-        </h3>
 
-        <p className="mt-1 text-gray-600">
-          {price.toFixed(2)} лв.
-        </p>
-      </div>
+      <h2 className="mt-4 text-xl font-bold">
+        {title}
+      </h2>
+
+
+      <p className="mt-2 text-lg">
+        {price.toFixed(2)} лв.
+      </p>
+
+
     </Link>
   );
 }
