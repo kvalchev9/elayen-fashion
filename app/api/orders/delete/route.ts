@@ -35,16 +35,32 @@ export async function POST(req: Request) {
 
 
 
+    if (order.status === "Отказана") {
+
+      return NextResponse.json({
+
+        success: false,
+        error: "Already cancelled"
+
+      });
+
+    }
+
+
+
     const products = JSON.parse(order.products);
 
 
 
     for (const item of products) {
 
+
       await prisma.product.update({
 
         where: {
+
           id: item.id,
+
         },
 
         data: {
@@ -59,12 +75,13 @@ export async function POST(req: Request) {
 
       });
 
+
     }
 
 
 
 
-    await prisma.order.delete({
+    await prisma.order.update({
 
       where: {
 
@@ -72,8 +89,13 @@ export async function POST(req: Request) {
 
       },
 
-    });
+      data: {
 
+        status: "Отказана",
+
+      },
+
+    });
 
 
 
