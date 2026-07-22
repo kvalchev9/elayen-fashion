@@ -1,10 +1,6 @@
 import { NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
 
-export async function POST(
-  request: Request
-) {
+export async function POST(request: Request) {
   try {
     const formData = await request.formData();
 
@@ -12,58 +8,28 @@ export async function POST(
 
     if (!file) {
       return NextResponse.json(
-        {
-          error: "Няма файл",
-        },
-        {
-          status: 400,
-        }
+        { error: "Няма файл" },
+        { status: 400 }
       );
     }
-
 
     const bytes = await file.arrayBuffer();
 
     const buffer = Buffer.from(bytes);
 
-
-    const fileName =
-      `${Date.now()}-${file.name}`;
-
-
-    const uploadPath = path.join(
-      process.cwd(),
-      "public",
-      "uploads",
-      "products",
-      fileName
-    );
-
-
-    await fs.writeFile(
-      uploadPath,
-      buffer
-    );
-
+    const base64 = `data:${file.type};base64,${buffer.toString("base64")}`;
 
     return NextResponse.json({
       success: true,
-      url: `/uploads/products/${fileName}`,
+      url: base64,
     });
 
-
   } catch (error) {
-
     console.error(error);
 
     return NextResponse.json(
-      {
-        error: "Upload error",
-      },
-      {
-        status: 500,
-      }
+      { error: "Upload error" },
+      { status: 500 }
     );
-
   }
 }
