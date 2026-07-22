@@ -104,6 +104,7 @@ export default function AddToCartButton({
 
 
 
+
     if (existing && existing.quantity >= stock) {
 
       alert("Няма повече налични бройки");
@@ -128,6 +129,8 @@ export default function AddToCartButton({
 
       image,
 
+      stock,
+
       size: selectedSize,
 
       color: selectedColor,
@@ -146,33 +149,22 @@ export default function AddToCartButton({
 
   return (
 
-
-
     <div className="mt-10 space-y-6">
-
-
-
 
 
 
       {sizes.length > 0 && (
 
-
         <div>
-
 
           <p className="mb-3 font-bold">
             Размер:
           </p>
 
 
-
-
           <div className="flex gap-3">
 
-
-            {sizes.map((size)=>(
-
+            {sizes.map((size) => (
 
               <button
 
@@ -196,18 +188,11 @@ export default function AddToCartButton({
 
               </button>
 
-
-
             ))}
-
-
 
           </div>
 
-
-
         </div>
-
 
       )}
 
@@ -217,26 +202,18 @@ export default function AddToCartButton({
 
 
 
-
       {colors.length > 0 && (
 
-
         <div>
-
 
           <p className="mb-3 font-bold">
             Цвят:
           </p>
 
 
-
-
-
           <div className="flex gap-3">
 
-
-            {colors.map((color)=>(
-
+            {colors.map((color) => (
 
               <button
 
@@ -260,18 +237,11 @@ export default function AddToCartButton({
 
               </button>
 
-
-
             ))}
-
-
 
           </div>
 
-
-
         </div>
-
 
       )}
 
@@ -281,9 +251,7 @@ export default function AddToCartButton({
 
 
 
-
       {stock > 0 ? (
-
 
         <button
 
@@ -296,7 +264,6 @@ export default function AddToCartButton({
           Добави в количката
 
         </button>
-
 
 
       ) : (
@@ -315,16 +282,11 @@ export default function AddToCartButton({
         </button>
 
 
-
       )}
 
 
 
-
-
-
     </div>
-
 
   );
 
