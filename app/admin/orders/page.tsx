@@ -50,18 +50,27 @@ export default async function OrdersPage({
 
   const orders = await prisma.order.findMany({
 
-    where: status
-      ? {
-          status,
-        }
-      : undefined,
+    where: {
+
+      status: {
+        not: "Отказана",
+      },
+
+      ...(status && {
+        status,
+      }),
+
+    },
 
 
     orderBy: {
+
       createdAt: "desc",
+
     },
 
   });
+
 
 
 
@@ -71,7 +80,10 @@ export default async function OrdersPage({
 
 
 
-  const totalOrders = allOrders.length;
+  const totalOrders = allOrders.filter(
+    (order) => order.status !== "Отказана"
+  ).length;
+
 
 
   const newOrders = allOrders.filter(
@@ -98,11 +110,14 @@ export default async function OrdersPage({
 
 
 
-
-  const totalRevenue = allOrders.reduce(
-    (sum, order) => sum + order.total,
-    0
-  );
+  const totalRevenue = allOrders
+    .filter(
+      (order) => order.status !== "Отказана"
+    )
+    .reduce(
+      (sum, order) => sum + order.total,
+      0
+    );
 
 
 
@@ -110,7 +125,7 @@ export default async function OrdersPage({
 
   return (
 
-    <main className="mx-auto max-w-6xl px-8 py-16">
+    <main className="mx-auto max-w-6xl px_8 py-16">
 
 
       <div className="mb-10 flex items-center justify-between">
@@ -125,7 +140,6 @@ export default async function OrdersPage({
 
 
       </div>
-
 
 
 
@@ -226,7 +240,6 @@ export default async function OrdersPage({
         </div>
 
 
-
       </div>
 
 
@@ -263,15 +276,10 @@ export default async function OrdersPage({
         <div className="space-y-6">
 
 
-
-
-
           {orders.map((order) => {
 
 
-
             const products = JSON.parse(order.products);
-
 
 
 
@@ -284,12 +292,7 @@ export default async function OrdersPage({
               >
 
 
-
-
-
-
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-
 
 
                   <div className="flex items-center gap-4">
@@ -298,7 +301,6 @@ export default async function OrdersPage({
                     <h3 className="text-xl font-bold">
                       Поръчка #{order.id}
                     </h3>
-
 
 
 
@@ -316,12 +318,10 @@ export default async function OrdersPage({
 
 
 
-
                   <OrderStatus
                     id={order.id}
                     currentStatus={order.status}
                   />
-
 
 
                 </div>
@@ -330,10 +330,7 @@ export default async function OrdersPage({
 
 
 
-
-
                 <div className="mt-5 space-y-2">
-
 
 
                   <p>
@@ -341,12 +338,9 @@ export default async function OrdersPage({
                   </p>
 
 
-
                   <p>
                     <b>Email:</b> {order.email}
                   </p>
-
-
 
 
                   <p>
@@ -354,13 +348,9 @@ export default async function OrdersPage({
                   </p>
 
 
-
-
                   <p>
                     <b>Адрес:</b> {order.city}, {order.address}
                   </p>
-
-
 
 
                   <p>
@@ -368,20 +358,14 @@ export default async function OrdersPage({
                   </p>
 
 
-
-
                   <p>
                     <b>Доставка:</b> {order.deliveryType || "Няма избрана"}
                   </p>
 
 
-
-
                   <p>
                     <b>Сума:</b> {order.total.toFixed(2)} €
                   </p>
-
-
 
 
 
@@ -393,56 +377,37 @@ export default async function OrdersPage({
 
 
 
-
-
                   <div className="rounded bg-gray-100 p-4 text-black">
 
 
                     {products.map((product:any, index:number)=> (
-
 
                       <div
                         key={`${product.id}-${index}`}
                         className="mb-4 border-b pb-3"
                       >
 
-
                         <p className="font-semibold">
                           {product.name} × {product.quantity}
                         </p>
 
 
-
-
                         {product.size && (
-
                           <p>
                             Размер: {product.size}
                           </p>
-
                         )}
-
-
-
-
 
 
                         {product.color && (
-
                           <p>
                             Цвят: {product.color}
                           </p>
-
                         )}
-
-
 
                       </div>
 
-
-
                     ))}
-
 
 
                   </div>
@@ -450,19 +415,10 @@ export default async function OrdersPage({
 
 
 
-
-
-
                   <DeleteOrder id={order.id}/>
 
 
-
-
-
                 </div>
-
-
-
 
 
               </div>
@@ -472,9 +428,6 @@ export default async function OrdersPage({
 
 
           })}
-
-
-
 
 
         </div>
