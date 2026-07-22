@@ -11,6 +11,7 @@ export default function NewProductPage() {
   const [form, setForm] = useState({
     name: "",
     price: "",
+    oldPrice: "",
     category: "",
     sizes: "",
     colors: "",
@@ -32,6 +33,7 @@ export default function NewProductPage() {
       [field]: value,
     });
   }
+
 
 
 
@@ -74,6 +76,7 @@ export default function NewProductPage() {
     const imageUrl = await uploadImage();
 
 
+
     const res = await fetch("/api/products", {
 
       method: "POST",
@@ -82,9 +85,17 @@ export default function NewProductPage() {
         "Content-Type": "application/json",
       },
 
+
       body: JSON.stringify({
+
         ...form,
+
+        oldPrice: form.oldPrice
+          ? Number(form.oldPrice)
+          : null,
+
         image: imageUrl,
+
       }),
 
     });
@@ -104,6 +115,7 @@ export default function NewProductPage() {
     }
 
   }
+
 
 
 
@@ -138,12 +150,26 @@ export default function NewProductPage() {
 
 
         <input
-          placeholder="Цена"
+          placeholder="Цена (€)"
           type="number"
+          step="0.01"
           className="w-full rounded border p-3 text-black"
           value={form.price}
           onChange={(e)=>
             update("price", e.target.value)
+          }
+        />
+
+
+
+        <input
+          placeholder="Стара цена (€) - по желание"
+          type="number"
+          step="0.01"
+          className="w-full rounded border p-3 text-black"
+          value={form.oldPrice}
+          onChange={(e)=>
+            update("oldPrice", e.target.value)
           }
         />
 
