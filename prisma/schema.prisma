@@ -41,7 +41,6 @@ model Order {
 
 
 
-
 model Product {
 
   id          Int      @id @default(autoincrement())
@@ -49,6 +48,8 @@ model Product {
   name        String
 
   price       Float
+
+  oldPrice    Float?
 
   image       String
 
