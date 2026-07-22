@@ -85,6 +85,7 @@ export default async function ProductPage({
 
 
 
+
           <div className="mt-6">
 
 
@@ -93,28 +94,55 @@ export default async function ProductPage({
 
               <>
 
-                <p className="text-2xl text-gray-500 line-through">
-                  {product.oldPrice.toFixed(2)} €
-                </p>
+
+                <div className="flex items-center gap-4">
 
 
-                <p className="text-3xl font-semibold text-red-600">
+                  <p className="text-2xl text-gray-500 line-through">
+                    {product.oldPrice.toFixed(2)} €
+                  </p>
+
+
+
+                  <span className="rounded bg-red-600 px-3 py-1 text-sm font-bold text-white">
+
+                    -
+                    {Math.round(
+                      ((product.oldPrice - product.price) /
+                        product.oldPrice) *
+                        100
+                    )}
+                    %
+
+                  </span>
+
+
+                </div>
+
+
+
+
+                <p className="mt-2 text-3xl font-semibold text-red-600">
                   {product.price.toFixed(2)} €
                 </p>
 
 
               </>
 
+
             ) : (
+
 
               <p className="text-3xl font-semibold">
                 {product.price.toFixed(2)} €
               </p>
 
+
             )}
 
 
           </div>
+
 
 
 
@@ -127,9 +155,11 @@ export default async function ProductPage({
 
 
 
+
           <p className="mt-8 text-gray-600">
             {product.description}
           </p>
+
 
 
 

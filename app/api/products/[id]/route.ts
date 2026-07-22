@@ -3,31 +3,90 @@ import { prisma } from "@/lib/prisma";
 
 
 
+function checkAdmin(request: Request) {
+
+  const cookie = request.headers.get("cookie");
+
+  return cookie?.includes("admin_auth=");
+
+}
+
+
+
+
+
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
 
+
+  if (!checkAdmin(request)) {
+
+    return NextResponse.json(
+      {
+        error: "Unauthorized",
+      },
+      {
+        status: 401,
+      }
+    );
+
+  }
+
+
+
   const { id } = await params;
 
 
-  await prisma.product.delete({
 
-    where: {
-      id: Number(id),
-    },
+  try {
 
-  });
+    await prisma.product.delete({
+
+      where: {
+        id: Number(id),
+      },
+
+    });
 
 
 
-  return NextResponse.json({
+    return NextResponse.json({
 
-    success: true,
+      success: true,
 
-  });
+    });
+
+
+
+  } catch (error) {
+
+
+    console.error(error);
+
+
+
+    return NextResponse.json(
+
+      {
+        success: false,
+        error: "Delete error",
+      },
+
+      {
+        status: 500,
+      }
+
+    );
+
+
+  }
 
 }
+
+
+
 
 
 
@@ -40,6 +99,23 @@ export async function PUT(
 ) {
 
 
+
+  if (!checkAdmin(request)) {
+
+    return NextResponse.json(
+      {
+        error: "Unauthorized",
+      },
+      {
+        status: 401,
+      }
+    );
+
+  }
+
+
+
+
   const { id } = await params;
 
 
@@ -48,56 +124,93 @@ export async function PUT(
 
 
 
-  const product = await prisma.product.update({
 
-    where: {
-
-      id: Number(id),
-
-    },
+  try {
 
 
-    data: {
+    const product = await prisma.product.update({
+
+      where: {
+
+        id: Number(id),
+
+      },
 
 
-      name: body.name,
+      data: {
 
 
-      price: Number(body.price),
+        name: body.name,
 
 
-      category: body.category,
+        price: Number(body.price),
 
 
-      sizes: body.sizes || "",
-
-
-      colors: body.colors || "",
-
-
-      image: body.image,
-
-
-      description: body.description || "",
-
-
-    },
-
-
-  });
+        oldPrice: body.oldPrice
+          ? Number(body.oldPrice)
+          : null,
 
 
 
+        category: body.category,
+
+
+        sizes: body.sizes || "",
+
+
+        colors: body.colors || "",
+
+
+        image: body.image,
+
+
+        description: body.description || "",
+
+
+      },
+
+
+    });
 
 
 
-  return NextResponse.json({
 
-    success: true,
 
-    product,
 
-  });
+    return NextResponse.json({
+
+      success: true,
+
+      product,
+
+    });
+
+
+
+
+
+  } catch (error) {
+
+
+    console.error(error);
+
+
+
+    return NextResponse.json(
+
+      {
+        success: false,
+        error: "Update error",
+      },
+
+      {
+        status: 500,
+      }
+
+    );
+
+
+  }
 
 
 }
