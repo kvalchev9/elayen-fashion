@@ -35,38 +35,16 @@ export async function POST(req: Request) {
 
 
 
-    // ако вече е отказана - не връщаме stock пак
-
-    if (order.status === "Отказана") {
-
-      return NextResponse.json({
-
-        success: false,
-        error: "Stock already restored"
-
-      });
-
-    }
-
-
-
-
     const products = JSON.parse(order.products);
 
 
 
-
-    // връщаме наличността
-
     for (const item of products) {
-
 
       await prisma.product.update({
 
         where: {
-
           id: item.id,
-
         },
 
         data: {
@@ -81,16 +59,12 @@ export async function POST(req: Request) {
 
       });
 
-
     }
 
 
 
 
-
-    // маркираме като отказана
-
-    await prisma.order.update({
+    await prisma.order.delete({
 
       where: {
 
@@ -98,14 +72,7 @@ export async function POST(req: Request) {
 
       },
 
-      data: {
-
-        status: "Отказана",
-
-      },
-
     });
-
 
 
 
@@ -128,17 +95,12 @@ export async function POST(req: Request) {
     return NextResponse.json(
 
       {
-
         success: false,
-
         error: "Delete error",
-
       },
 
       {
-
         status: 500,
-
       }
 
     );
