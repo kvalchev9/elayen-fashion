@@ -3,20 +3,29 @@ import { prisma } from "@/lib/prisma";
 import DeleteProductButton from "@/components/DeleteProductButton";
 
 export default async function ProductsPage() {
-
   const products = await prisma.product.findMany({
     orderBy: {
       createdAt: "desc",
     },
   });
 
-
   return (
     <main className="mx-auto max-w-6xl px-8 py-16">
 
-      <h1 className="mb-10 text-4xl font-bold text-white">
-        Админ - Продукти
-      </h1>
+      <div className="mb-10 flex items-center justify-between">
+
+        <h1 className="text-4xl font-bold text-white">
+          Админ - Продукти
+        </h1>
+
+        <a
+          href="/admin/products/new"
+          className="rounded bg-white px-5 py-3 font-semibold text-black hover:bg-gray-200"
+        >
+          + Добави продукт
+        </a>
+
+      </div>
 
 
       {products.length === 0 ? (
@@ -67,7 +76,17 @@ export default async function ProductsPage() {
                 </p>
 
 
-                <p className="text-gray-400">
+                <p className="text-white">
+                  Размери: {product.sizes}
+                </p>
+
+
+                <p className="text-white">
+                  Цветове: {product.colors}
+                </p>
+
+
+                <p className="mt-2 text-gray-400">
                   {product.description}
                 </p>
 
