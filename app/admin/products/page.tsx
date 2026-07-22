@@ -87,7 +87,7 @@ export default async function ProductsPage() {
 
 
                 <p className="mt-2 text-white">
-                  Цена: {product.price.toFixed(2)} лв.
+                  Цена: {product.price.toFixed(2)} €
                 </p>
 
 
